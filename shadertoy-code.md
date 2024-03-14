@@ -1,36 +1,16 @@
 in shadertoy, use
 
 ```
-// The Universe Within - by Martijn Steinrucken aka BigWings 2018
-// Email:countfrolic@gmail.com Twitter:@The_ArtOfCode
+// The Universe Within - by Martijn Steinrucken aka BigWings 2018, customized by Guillaume Quint 2024
+// Email:countfrolic@gmail.com Twitter:@The_ArtOfCode - Email:hiring@glmquint.com
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
-
-// After listening to an interview with Michael Pollan on the Joe Rogan
-// podcast I got interested in mystic experiences that people seem to
-// have when using certain psycoactive substances. 
-//
-// For best results, watch fullscreen, with music, in a dark room.
-// 
-// I had an unused 'blockchain effect' lying around and used it as
-// a base for this effect. Uncomment the SIMPLE define to see where
-// this came from.
-// 
-// Use the mouse to get some 3d parallax.
-
-// Music - Terrence McKenna Mashup - Jason Burruss Remixes
-// https://soundcloud.com/jason-burruss-remixes/terrence-mckenna-mashup
-//
-// YouTube video of this effect:
-// https://youtu.be/GAhu4ngQa48
-//
-// YouTube Tutorial for this effect:
-// https://youtu.be/3CycKKJiwis
 
 
 #define S(a, b, t) smoothstep(a, b, t)
 #define NUM_LAYERS 4.
 
-//#define SIMPLE
+#define DURATION 230.
+#define TRANSITION 20.
 
 
 float N21(vec2 p) {
@@ -126,8 +106,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float s = sin(t);
     float c = cos(t);
     mat2 rot = mat2(c, -s, s, c);
-    vec2 st = uv*rot;  
-	M *= rot*2.;
+    vec2 st = uv;//*rot;  
+	//M *= rot*2.;
     
     float m = 0.;
     for(float i=0.; i<1.; i+=1./NUM_LAYERS) {
@@ -137,9 +117,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         
         m += fade * NetLayer(st*size-M*z, i, iTime);
     }
-    
-	//float fft  = texelFetch( iChannel0, ivec2(.7,0), 0 ).x;
-    float glow = uv.y*2.;
+
+    float glow = uv.y*1.;
    
     vec3 baseCol = vec3(s, cos(t*.4), -sin(t*.24))*.4+.6;
     vec3 col = baseCol*m;
@@ -147,8 +126,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     
 
     col *= 1.-dot(uv,uv);
-    t = mod(iTime, 230.);
-    col *= S(0., 20., t)*S(224., 200., t);
+    t = mod(iTime, DURATION);
+    col *= S(-5., TRANSITION, t)*S(DURATION + 5., DURATION-TRANSITION, t);
     
     fragColor = vec4(col*uv.y,1);
 }
