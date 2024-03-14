@@ -18,12 +18,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fragment shader
     const fsSource = `
         precision highp float;
+
+		uniform vec2 uResolution;
         uniform vec2 uMouse;
         uniform float uTime;
         void main() {
-            float red = uMouse.x;
-            float green = uMouse.y;
-            float blue = sin(uTime);
+			vec2 uv = gl_FragCoord.xy / uResolution;
+            float red = uv.x * uMouse.x;
+            float green = uv.y * uMouse.y;
+            float blue = (sin(uTime)+1.)/2.;
             gl_FragColor = vec4(red, green, blue, 1.0);
         }
     `;
@@ -33,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Get attribute and uniform locations
     const positionAttributeLocation = gl.getAttribLocation(shaderProgram, "aPosition");
+	const resolutionUniformLocation = gl.getUniformLocation(shaderProgram, "uResolution");
     const mouseUniformLocation = gl.getUniformLocation(shaderProgram, "uMouse");
     const timeUniformLocation = gl.getUniformLocation(shaderProgram, "uTime");
 
@@ -58,14 +62,34 @@ document.addEventListener("DOMContentLoaded", () => {
     let mouseX = 0;
     let mouseY = 0;
     canvas.addEventListener("mousemove", (event) => {
-        mouseX = (event.clientX / canvas.width) * 2 - 1;
-        mouseY = (event.clientY / canvas.height) * 2 - 1;
+        mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+        mouseY = (event.clientY / window.innerHeight) * 2 - 1;
     });
+
+	canvas.addEventListener("touchmove", (event) => {
+		event.preventDefault();
+		const touch = event.changedTouches[0];
+        mouseX = (touch.pageX / window.innerWidth) * 2 - 1;
+        mouseY = (touch.pageY / window.innerHeight) * 2 - 1;
+	});
+
+	// Update resolution uniform when canvas size changes
+    function updateResolution() {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+        gl.uniform2f(resolutionUniformLocation, canvas.width, canvas.height);
+		gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    }
+    updateResolution();
+	window.addEventListener("resize", updateResolution);
+
+	beginTime = Date.now() % 100000
 
     // Render loop
     function render() {
         gl.uniform2f(mouseUniformLocation, mouseX, mouseY);
-        gl.uniform1f(timeUniformLocation, performance.now() / 1000); // Convert to seconds
+		rightNow = beginTime + performance.now() // allow sync between devices
+        gl.uniform1f(timeUniformLocation, rightNow / 1000); // Convert to seconds
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         requestAnimationFrame(render);
     }
