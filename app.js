@@ -150,8 +150,8 @@ document.addEventListener("DOMContentLoaded", () => {
             
 
             col *= 1.-dot(uv,uv);
-            t = mod(uTime, DURATION);
-            col *= S(-5., TRANSITION, t)*S(DURATION + 5., DURATION-TRANSITION, t);
+            // t = mod(uTime, DURATION);
+            // col *= S(-5., TRANSITION, t)*S(DURATION + 5., DURATION-TRANSITION, t);
             
             gl_FragColor = vec4(col*uv.y*1.5,1);
             //gl_FragColor = vec4(uMouse, 1., 1.);
