@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
             float s = sin(t);
             float c = cos(t);
-            mat2 rot = mat2(c, -s, s, c);
+            //mat2 rot = mat2(c, -s, s, c);
             vec2 st = uv;//*rot;  
             //M *= rot*2.;
             
@@ -187,17 +187,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Mouse position tracking
     let mouseX = 0;
+    let wantMouseX = 0;
     let mouseY = 0;
+    let wantMouseY = 0;
+    let lerpFactor = 0.3;
     canvas.addEventListener("mousemove", (event) => {
-        mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-        mouseY = (-event.clientY / window.innerHeight) * 2 - 1;
+        wantMouseX = (event.clientX / window.innerWidth) * 2 - 1;
+        wantMouseY = (-event.clientY / window.innerHeight) * 2 - 1;
     });
 
 	canvas.addEventListener("touchmove", (event) => {
 		event.preventDefault();
 		const touch = event.changedTouches[0];
-        mouseX = (touch.pageX / window.innerWidth) * 2 - 1;
-        mouseY = (-touch.pageY / window.innerHeight) * 2 - 1;
+        wantMouseX = (touch.pageX / window.innerWidth) * 2 - 1;
+        wantMouseY = (-touch.pageY / window.innerHeight) * 2 - 1;
 	});
 
 	// Update resolution uniform when canvas size changes
@@ -210,12 +213,18 @@ document.addEventListener("DOMContentLoaded", () => {
     updateResolution();
 	window.addEventListener("resize", updateResolution);
 
+    function lerp( a, b, alpha ) {
+        return a + alpha * (b - a);
+    }
+
 	beginTime = Date.now() % 100000
 
     // Render loop
     function render() {
-        gl.uniform2f(mouseUniformLocation, mouseX, mouseY);
 		rightNow = beginTime + performance.now() // allow sync between devices
+        mouseX = lerp(mouseX, wantMouseX, lerpFactor)
+        mouseY = lerp(mouseY, wantMouseY, lerpFactor)
+        gl.uniform2f(mouseUniformLocation, mouseX, mouseY);
         gl.uniform1f(timeUniformLocation, rightNow / 1000); // Convert to seconds
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         requestAnimationFrame(render);
