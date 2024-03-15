@@ -16,20 +16,21 @@
             height: 100%;
             display: block;
         }
-		body > *:not(:first-child) {
+		#content {
 			position: absolute;
 			top: 50%;
 			left: 50%;
 			transform:translate(-50%,-50%);
 			border: 0px solid red;
             text-align: center;
-            color:white
+            color:white;
+            pointer-events: none;
 		}
     </style>
 </head>
 <body>
 	<canvas id="webglCanvas"></canvas>
-	<div>
+	<div id="content">
 		<h1 >
             Guillaume Quint
 		</h1>
