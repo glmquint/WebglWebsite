@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		uniform vec2 uResolution;
         uniform vec2 uMouse;
         uniform float uTime;
+        uniform float uExcitement;
 
         #define S(a, b, t) smoothstep(a, b, t)
         #define NUM_LAYERS 4.
@@ -143,6 +144,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             float glow = uv.y*1.;
+
+            t *= uExcitement;
         
             vec3 baseCol = vec3(s, cos(t*.4), -sin(t*.24))*.4+.6;
             vec3 col = baseCol*m;
@@ -166,6 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	const resolutionUniformLocation = gl.getUniformLocation(shaderProgram, "uResolution");
     const mouseUniformLocation = gl.getUniformLocation(shaderProgram, "uMouse");
     const timeUniformLocation = gl.getUniformLocation(shaderProgram, "uTime");
+    const excitementUniformLocation = gl.getUniformLocation(shaderProgram, "uExcitement");
 
     // Create buffer and bind data
     const positionBuffer = gl.createBuffer();
@@ -190,12 +194,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let wantMouseX = 0;
     let mouseY = 0;
     let wantMouseY = 0;
-    let lerpFactor = 0.3;
     canvas.addEventListener("mousemove", (event) => {
         wantMouseX = (event.clientX / window.innerWidth) * 2 - 1;
         wantMouseY = (-event.clientY / window.innerHeight) * 2 - 1;
     });
 
+    // Equivalent touch screen position tracking
 	canvas.addEventListener("touchmove", (event) => {
 		event.preventDefault();
 		const touch = event.changedTouches[0];
@@ -213,19 +217,35 @@ document.addEventListener("DOMContentLoaded", () => {
     updateResolution();
 	window.addEventListener("resize", updateResolution);
 
+    // Excitement
+    let excitement = 0;
+    let wantExcetement = 0;
+    eccitor = document.getElementById("eccitor");
+    eccitor.addEventListener('mouseleave', (event) => {
+        wantExcetement = 0;
+    })
+    eccitor.addEventListener('mouseenter', (event) => {
+        wantExcetement = 1;
+    })
+
     function lerp( a, b, alpha ) {
         return a + alpha * (b - a);
     }
 
 	beginTime = Date.now() % 100000
 
+
+    let lerpFactor = 0.3;
     // Render loop
     function render() {
 		rightNow = beginTime + performance.now() // allow sync between devices
-        mouseX = lerp(mouseX, wantMouseX, lerpFactor)
-        mouseY = lerp(mouseY, wantMouseY, lerpFactor)
+        mouseX = lerp(mouseX, wantMouseX, lerpFactor);
+        mouseY = lerp(mouseY, wantMouseY, lerpFactor);
+        excitement = lerp(excitement, wantExcetement, lerpFactor);
+        console.log(excitement)
         gl.uniform2f(mouseUniformLocation, mouseX, mouseY);
         gl.uniform1f(timeUniformLocation, rightNow / 1000); // Convert to seconds
+        gl.uniform1f(excitementUniformLocation, excitement); // Convert to seconds
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         requestAnimationFrame(render);
     }
