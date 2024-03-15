@@ -32,16 +32,52 @@
         .hoverable {
             pointer-events:all !important;
 		}
+        .mouse-cursor-gradient-tracking {
+            position: relative;
+            background: #000000;
+            padding: 0.5rem 1rem;
+            font-size: 1.2rem;
+            border: none;
+            color: white;
+            cursor: pointer;
+            outline: none;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+        .mouse-cursor-gradient-tracking span {
+            position: relative;
+        }
+
+        .mouse-cursor-gradient-tracking:before {
+            --size: 10;
+            content: '';
+            position: absolute;
+            left: var(--x);
+            top: var(--y);
+            width: var(--size);
+            height: var(--size);
+            background: radial-gradient(circle closest-side, #313131, transparent);
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease, height 0.2s ease;
+        }
+
+        .mouse-cursor-gradient-tracking:hover:before {
+            --size: 200px;
+        }
     </style>
 </head>
 <body>
 	<canvas id="webglCanvas"></canvas>
 	<div id="content">
-		<h1 class="hoverable" id="eccitor">
+		<h1 class="hoverable eccitor">
             Guillaume Quint
 		</h1>
         <h3>Computer Engineer</h3>
-        <button class="hoverable">Download CV</button>
+        <button class="eccitor hoverable mouse-cursor-gradient-tracking">
+            <span>
+                Download CV
+            </span>
+        </button>
 	</div>
     <script src="app.js"></script>
 </body>

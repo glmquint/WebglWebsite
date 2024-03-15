@@ -192,6 +192,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let wantMouseX = 0;
     let mouseY = 0;
     let wantMouseY = 0;
+    let btn = document.getElementsByClassName("mouse-cursor-gradient-tracking")[0]
+    btn.addEventListener("mousemove", (event) => {
+        let rect = btn.getBoundingClientRect();
+        let x = event.clientX - rect.left;
+        let y = event.clientY - rect.top;
+        btn.style.setProperty('--x', x + 'px')
+        btn.style.setProperty('--y', y + 'px')
+    })
     canvas.addEventListener("mousemove", (event) => {
         wantMouseX = (event.clientX / window.innerWidth) * 2 - 1;
         wantMouseY = (-event.clientY / window.innerHeight) * 2 - 1;
@@ -218,13 +226,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // Excitement
     let excitement = 0;
     let wantExcetement = 0;
-    eccitor = document.getElementById("eccitor");
-    eccitor.addEventListener('mouseleave', (event) => {
-        wantExcetement = 0;
-    })
-    eccitor.addEventListener('mouseenter', (event) => {
-        wantExcetement = 1;
-    })
+    eccitors = document.getElementsByClassName("eccitor");
+    for (let i = 0; i < eccitors.length; i++) {
+        const eccitor = eccitors[i];
+        
+        eccitor.addEventListener('mouseleave', (event) => {
+            wantExcetement = 0;
+        })
+        eccitor.addEventListener('mouseenter', (event) => {
+            wantExcetement = 1;
+        })
+    }
 
     function lerp( a, b, alpha ) {
         return a + alpha * (b - a);
