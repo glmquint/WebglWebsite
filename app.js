@@ -192,6 +192,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let wantMouseX = 0;
     let mouseY = 0;
     let wantMouseY = 0;
+
+    // For the button gradient on hover
     let btn = document.getElementsByClassName("mouse-cursor-gradient-tracking")[0]
     btn.addEventListener("mousemove", (event) => {
         let rect = btn.getBoundingClientRect();
@@ -200,6 +202,8 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.style.setProperty('--x', x + 'px')
         btn.style.setProperty('--y', y + 'px')
     })
+
+    // For the shader offset
     canvas.addEventListener("mousemove", (event) => {
         wantMouseX = (event.clientX / window.innerWidth) * 2 - 1;
         wantMouseY = (-event.clientY / window.innerHeight) * 2 - 1;
@@ -223,13 +227,12 @@ document.addEventListener("DOMContentLoaded", () => {
     updateResolution();
 	window.addEventListener("resize", updateResolution);
 
-    // Excitement
+    // Excitement factor when pressing an eccitor object
     let excitement = 0;
     let wantExcetement = 0;
     eccitors = document.getElementsByClassName("eccitor");
     for (let i = 0; i < eccitors.length; i++) {
         const eccitor = eccitors[i];
-        
         eccitor.addEventListener('mouseleave', (event) => {
             wantExcetement = 0;
         })
@@ -238,12 +241,13 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
 
+    // Linear interpolation utility
     function lerp( a, b, alpha ) {
         return a + alpha * (b - a);
     }
 
-	beginTime = Date.now() % 100000
-
+    // we accept up to 100 seconds of clock skew for synchronization
+	beginTime = Date.now() % 100000 
 
     let lerpFactor = 0.3;
     // Render loop
@@ -254,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
         excitement = lerp(excitement, wantExcetement, lerpFactor);
         gl.uniform2f(mouseUniformLocation, mouseX, mouseY);
         gl.uniform1f(timeUniformLocation, rightNow / 1000); // Convert to seconds
-        gl.uniform1f(excitementUniformLocation, excitement); // Convert to seconds
+        gl.uniform1f(excitementUniformLocation, excitement);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         requestAnimationFrame(render);
     }
