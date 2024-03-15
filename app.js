@@ -24,8 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
         uniform float uTime;
         void main() {
 			vec2 uv = gl_FragCoord.xy / uResolution;
-            float red = uv.x * uMouse.x;
-            float green = uv.y * uMouse.y;
+            float red = uv.x;// * uMouse.x;
+            float green = uv.y;// * uMouse.y;
             float blue = (sin(uTime)+1.)/2.;
             gl_FragColor = vec4(red, green, blue, 1.0);
         }

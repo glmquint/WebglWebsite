@@ -16,9 +16,21 @@
             height: 100%;
             display: block;
         }
+		body > *:not(:first-child) {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform:translate(-50%,-50%);
+			border: 0px solid red;
+		}
     </style>
 </head>
 <body>
-    <canvas id="webglCanvas"></canvas>
+	<canvas id="webglCanvas"></canvas>
+	<div>
+		<h1 style="color:white">
+			Lorem Ipsum
+		</h1>
+	</div>
     <script src="app.js"></script>
 </body>
