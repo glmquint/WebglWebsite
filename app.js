@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 float s = (.005/(d*d));
                 s *= S(1., .7, d);
                 float pulse = sin((fract(p[i].x)+fract(p[i].y)+t)*5.)*.4+.6;
-                pulse = pow(pulse, 20.);
+                pulse = pow(pulse, 20.)*(5.*uExcitement+1.);
 
                 s *= pulse;
                 sparkle += s;
@@ -143,10 +143,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 m += fade * NetLayer(st*size-M*z, i, uTime);
             }
 
-            float glow = uv.y*1.;
+            float glow = uv.y*1.*(.4*uExcitement+1.);
 
-            t *= uExcitement;
-        
             vec3 baseCol = vec3(s, cos(t*.4), -sin(t*.24))*.4+.6;
             vec3 col = baseCol*m;
             col += baseCol*glow;
@@ -242,7 +240,6 @@ document.addEventListener("DOMContentLoaded", () => {
         mouseX = lerp(mouseX, wantMouseX, lerpFactor);
         mouseY = lerp(mouseY, wantMouseY, lerpFactor);
         excitement = lerp(excitement, wantExcetement, lerpFactor);
-        console.log(excitement)
         gl.uniform2f(mouseUniformLocation, mouseX, mouseY);
         gl.uniform1f(timeUniformLocation, rightNow / 1000); // Convert to seconds
         gl.uniform1f(excitementUniformLocation, excitement); // Convert to seconds

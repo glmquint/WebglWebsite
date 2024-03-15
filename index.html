@@ -10,6 +10,7 @@
             height: 100vh;
 			width: 100vw;
             background-color: #000;
+            font-family: sans-serif;
         }
         canvas {
             width: 100%;
@@ -20,13 +21,15 @@
 			position: absolute;
 			top: 50%;
 			left: 50%;
+            width: max-content;
 			transform:translate(-50%,-50%);
 			border: 0px solid red;
             text-align: center;
             color:white;
             pointer-events:none;
+            user-select: none;
         }
-        #content > button {
+        .hoverable {
             pointer-events:all !important;
 		}
     </style>
@@ -34,10 +37,11 @@
 <body>
 	<canvas id="webglCanvas"></canvas>
 	<div id="content">
-		<h1 >
+		<h1 class="hoverable" id="eccitor">
             Guillaume Quint
 		</h1>
-        <button id="eccitor">Computer Engineer</button>
+        <h3>Computer Engineer</h3>
+        <button class="hoverable">Download CV</button>
 	</div>
     <script src="app.js"></script>
 </body>
