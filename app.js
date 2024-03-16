@@ -260,6 +260,8 @@ function setup(event, forceDisableWebGL) {
     // we accept up to 100 seconds of clock skew for synchronization
 	beginTime = Date.now() % 100000 
 
+    toColorize = document.getElementsByClassName("colorize");
+
     let lerpFactor = 0.3;
     // Render loop
     function render() {
@@ -271,6 +273,14 @@ function setup(event, forceDisableWebGL) {
         gl.uniform1f(timeUniformLocation, rightNow / 1000); // Convert to seconds
         gl.uniform1f(excitementUniformLocation, excitement);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        t = rightNow / 10000;
+        r = Math.sin(t)
+        g = Math.cos(t*0.4)
+        b = Math.sin(t*0.24)
+        for (let i = 0; i < toColorize.length; i++) {
+            const elem = toColorize[i];
+            elem.style.setProperty('--clr', 'rgb(' + (r*0.4+0.6)*256 + ', ' + (g*0.4 + 0.6)*256 + ', ' + (-b*0.4 + 0.6)*256 + ')');
+        }
         requestAnimationFrame(render);
     }
     render();

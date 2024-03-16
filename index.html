@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Guillaume Quint's personal website">
-    <title>WebGL Shader</title>
+    <title>Guillaume Quint</title>
     <style>
         body {
             margin: 0;
@@ -26,7 +26,7 @@
 			transform:translate(-50%,-50%);
 			border: 0px solid red;
             text-align: center;
-            color:white;
+            color:lightgray;
             pointer-events:none;
             user-select: none;
         }
@@ -73,13 +73,35 @@
             background: radial-gradient(circle closest-side, #555555, transparent);
             transform: translate(-50%, -50%);
         }
+        .colorize:hover {
+            color: white !important;
+        }
+        .colorize {
+            color: white;
+            transition: color 0.5s;
+        }
+
+        button.colorize {
+            box-shadow: var(--clr) 0px 0px 10px 0px;
+            transition: box-shadow 0.1s;
+        }
+        button.colorize:hover {
+            box-shadow: var(--clr) 0px 3px 30px 0px;
+        }
+        h1.colorize {
+            text-shadow:  0px 0px 10px var(--clr);
+            transition: text-shadow 0.1s;
+        }
+        h1.colorize:hover {
+            text-shadow:  0px 3px 30px var(--clr);
+        }
 
     </style>
 </head>
 <body>
 	<canvas id="webglCanvas"></canvas>
 	<div id="content">
-		<h1 class="eccitor">
+		<h1 class="colorize eccitor ">
             Guillaume Quint
 		</h1>
         <h3>Computer Engineer - Cybersecurity</h3>
@@ -88,7 +110,7 @@
                 View Projects
             </span>
         </button>
-        <button class="eccitor mouse-cursor-gradient-tracking">
+        <button class="colorize eccitor mouse-cursor-gradient-tracking">
             <span>
                 Download CV
             </span>
