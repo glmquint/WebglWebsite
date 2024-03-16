@@ -29,7 +29,7 @@
             pointer-events:none;
             user-select: none;
         }
-        .hoverable {
+        .eccitor {
             pointer-events:all !important;
 		}
         .mouse-cursor-gradient-tracking {
@@ -49,32 +49,35 @@
         }
 
         .mouse-cursor-gradient-tracking:before {
-            --size: 10;
+            --size: 200px;
             content: '';
             position: absolute;
             left: var(--x);
             top: var(--y);
             width: var(--size);
             height: var(--size);
-            background: radial-gradient(circle closest-side, #313131, transparent);
+            background: radial-gradient(circle closest-side, #555555, transparent);
             transform: translate(-50%, -50%);
             transition: width 0.2s ease, height 0.2s ease;
         }
 
-        .mouse-cursor-gradient-tracking:hover:before {
-            --size: 200px;
+        .mouse-cursor-gradient-tracking:before {
         }
     </style>
 </head>
 <body>
 	<canvas id="webglCanvas"></canvas>
 	<div id="content">
-		<h1 class="hoverable eccitor">
+		<h1 class="eccitor">
             Guillaume Quint
 		</h1>
-        <h3>Computer Engineer</h3>
-        <h4>Cybersecurity</h4>
-        <button class="eccitor hoverable mouse-cursor-gradient-tracking">
+        <h3>Computer Engineer - Cybersecurity</h3>
+        <button class="eccitor mouse-cursor-gradient-tracking">
+            <span>
+                View Projects
+            </span>
+        </button>
+        <button class="eccitor mouse-cursor-gradient-tracking">
             <span>
                 Download CV
             </span>

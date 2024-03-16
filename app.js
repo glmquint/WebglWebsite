@@ -194,27 +194,31 @@ document.addEventListener("DOMContentLoaded", () => {
     let wantMouseY = 0;
 
     // For the button gradient on hover
-    let btn = document.getElementsByClassName("mouse-cursor-gradient-tracking")[0]
-    btn.addEventListener("mousemove", (event) => {
-        let rect = btn.getBoundingClientRect();
-        let x = event.clientX - rect.left;
-        let y = event.clientY - rect.top;
-        btn.style.setProperty('--x', x + 'px')
-        btn.style.setProperty('--y', y + 'px')
-    })
+    let buttons = document.getElementsByClassName("mouse-cursor-gradient-tracking");
 
-    // For the shader offset
-    canvas.addEventListener("mousemove", (event) => {
-        wantMouseX = (event.clientX / window.innerWidth) * 2 - 1;
-        wantMouseY = (-event.clientY / window.innerHeight) * 2 - 1;
+    function updateMousePosition(clientX, clientY) {
+        wantMouseX = (clientX / window.innerWidth) * 2 - 1;
+        wantMouseY = (-clientY / window.innerHeight) * 2 - 1;
+        for (let i = 0; i < buttons.length; i++) {
+            const btn = buttons[i];
+            let rect = btn.getBoundingClientRect();
+            let x = clientX - rect.left;
+            let y = clientY - rect.top;
+            btn.style.setProperty('--x', x + 'px')
+            btn.style.setProperty('--y', y + 'px')
+        }
+    };
+    updateMousePosition(-100,-100)
+
+    document.getElementsByTagName("body")[0].addEventListener("mousemove", (event) => {
+        updateMousePosition(event.clientX, event.clientY)
     });
 
     // Equivalent touch screen position tracking
-	canvas.addEventListener("touchmove", (event) => {
+    document.getElementsByTagName("body")[0].addEventListener("touchmove", (event) => {
 		event.preventDefault();
 		const touch = event.changedTouches[0];
-        wantMouseX = (touch.pageX / window.innerWidth) * 2 - 1;
-        wantMouseY = (-touch.pageY / window.innerHeight) * 2 - 1;
+        updateMousePosition(touch.pageX, touch.pageY)
 	});
 
 	// Update resolution uniform when canvas size changes
