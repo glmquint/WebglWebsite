@@ -198,7 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateMousePosition(clientX, clientY) {
         wantMouseX = (clientX / window.innerWidth) * 2 - 1;
-        wantMouseY = (-clientY / window.innerHeight) * 2 - 1;
+        wantMouseY = (-clientY / window.innerHeight) * 2 - 1; // Invert Y
         for (let i = 0; i < buttons.length; i++) {
             const btn = buttons[i];
             let rect = btn.getBoundingClientRect();
@@ -209,13 +209,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
     updateMousePosition(-100,-100)
+    body = document.getElementsByTagName("body")[0]
 
-    document.getElementsByTagName("body")[0].addEventListener("mousemove", (event) => {
+    // Body mouse position tracking
+    body.addEventListener("mousemove", (event) => {
         updateMousePosition(event.clientX, event.clientY)
     });
 
     // Equivalent touch screen position tracking
-    document.getElementsByTagName("body")[0].addEventListener("touchmove", (event) => {
+    body.addEventListener("touchmove", (event) => {
 		event.preventDefault();
 		const touch = event.changedTouches[0];
         updateMousePosition(touch.pageX, touch.pageY)
@@ -231,7 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateResolution();
 	window.addEventListener("resize", updateResolution);
 
-    // Excitement factor when pressing an eccitor object
+    // Excitement factor update when pressing an eccitor object
     let excitement = 0;
     let wantExcetement = 0;
     eccitors = document.getElementsByClassName("eccitor");
