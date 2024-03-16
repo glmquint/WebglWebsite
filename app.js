@@ -1,8 +1,48 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", (event) => setup(event, window.location.search.includes("forceDisableWebGL")));
+
+function setup(event, forceDisableWebGL) {
+
+    // Mouse position tracking
+    let mouseX = 0;
+    let wantMouseX = 0;
+    let mouseY = 0;
+    let wantMouseY = 0;
+
+    // For the button gradient on hover
+    let buttons = document.getElementsByClassName("mouse-cursor-gradient-tracking");
+
+    function updateMousePosition(clientX, clientY) {
+        wantMouseX = (clientX / window.innerWidth) * 2 - 1;
+        wantMouseY = (-clientY / window.innerHeight) * 2 - 1; // Invert Y
+        for (let i = 0; i < buttons.length; i++) {
+            const btn = buttons[i];
+            let rect = btn.getBoundingClientRect();
+            let x = clientX - rect.left;
+            let y = clientY - rect.top;
+            btn.style.setProperty('--x', x + 'px')
+            btn.style.setProperty('--y', y + 'px')
+        }
+    };
+    updateMousePosition(-100,-100)
+    body = document.getElementsByTagName("body")[0]
+
+    // Body mouse position tracking
+    body.addEventListener("mousemove", (event) => {
+        updateMousePosition(event.clientX, event.clientY)
+    });
+
+    // Equivalent touch screen position tracking
+    body.addEventListener("touchmove", (event) => {
+		event.preventDefault();
+		const touch = event.changedTouches[0];
+        updateMousePosition(touch.pageX, touch.pageY)
+	});
+
+
     const canvas = document.getElementById("webglCanvas");
     const gl = canvas.getContext("webgl");
 
-    if (!gl) {
+    if (!gl ||forceDisableWebGL) {
         console.error("Unable to initialize WebGL. Your browser may not support it.");
         return;
     }
@@ -187,42 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
 
-    // Mouse position tracking
-    let mouseX = 0;
-    let wantMouseX = 0;
-    let mouseY = 0;
-    let wantMouseY = 0;
-
-    // For the button gradient on hover
-    let buttons = document.getElementsByClassName("mouse-cursor-gradient-tracking");
-
-    function updateMousePosition(clientX, clientY) {
-        wantMouseX = (clientX / window.innerWidth) * 2 - 1;
-        wantMouseY = (-clientY / window.innerHeight) * 2 - 1; // Invert Y
-        for (let i = 0; i < buttons.length; i++) {
-            const btn = buttons[i];
-            let rect = btn.getBoundingClientRect();
-            let x = clientX - rect.left;
-            let y = clientY - rect.top;
-            btn.style.setProperty('--x', x + 'px')
-            btn.style.setProperty('--y', y + 'px')
-        }
-    };
-    updateMousePosition(-100,-100)
-    body = document.getElementsByTagName("body")[0]
-
-    // Body mouse position tracking
-    body.addEventListener("mousemove", (event) => {
-        updateMousePosition(event.clientX, event.clientY)
-    });
-
-    // Equivalent touch screen position tracking
-    body.addEventListener("touchmove", (event) => {
-		event.preventDefault();
-		const touch = event.changedTouches[0];
-        updateMousePosition(touch.pageX, touch.pageY)
-	});
-
+    
 	// Update resolution uniform when canvas size changes
     function updateResolution() {
         canvas.width = window.innerWidth
@@ -270,7 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     render();
 
-});
+};
 
 // Function to create shader program
 function createShaderProgram(gl, vsSource, fsSource) {
