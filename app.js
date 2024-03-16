@@ -277,9 +277,11 @@ function setup(event, forceDisableWebGL) {
         r = Math.sin(t)
         g = Math.cos(t*0.4)
         b = Math.sin(t*0.24)
+        color = 'rgb(' + (r*0.4+0.6)*256 + ', ' + (g*0.4 + 0.6)*256 + ', ' + (-b*0.4 + 0.6)*256
         for (let i = 0; i < toColorize.length; i++) {
             const elem = toColorize[i];
-            elem.style.setProperty('--clr', 'rgb(' + (r*0.4+0.6)*256 + ', ' + (g*0.4 + 0.6)*256 + ', ' + (-b*0.4 + 0.6)*256 + ')');
+            elem.style.setProperty('--34clr', color + ', 75%)');
+            elem.style.setProperty('--clr', color + ', 100%)');
         }
         requestAnimationFrame(render);
     }
