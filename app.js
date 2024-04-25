@@ -257,8 +257,8 @@ function setup(event, forceDisableWebGL) {
         return a + alpha * (b - a);
     }
 
-    // we accept up to 100 seconds of clock skew for synchronization
-	beginTime = Date.now() % 100000 
+    // we accept up to 1000 (~16 minutes) seconds of clock skew for synchronization
+	beginTime = Date.now() % 1000000 
 
     toColorize = document.getElementsByClassName("colorize");
 
