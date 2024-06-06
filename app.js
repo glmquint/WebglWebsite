@@ -32,11 +32,23 @@ function setup(event, forceDisableWebGL) {
     });
 
     // Equivalent touch screen position tracking
-    body.addEventListener("touchmove", (event) => {
-		event.preventDefault();
-		const touch = event.changedTouches[0];
-        updateMousePosition(touch.pageX, touch.pageY)
-	});
+  //   body.addEventListener("touchmove", (event) => {
+		// event.preventDefault();
+		// const touch = event.changedTouches[0];
+  //       updateMousePosition(touch.pageX, touch.pageY)
+  //   });
+    window.addEventListener('deviceorientation', (e) => {
+        let gamma = (e.gamma) / 30
+        let beta = (e.beta) / 30
+        if (window.orientation == 0){
+            wantMouseX = gamma
+            wantMouseY = -beta
+        } else {
+            wantMouseX = beta
+            wantMouseY = gamma
+        }
+    });
+
 
 
     const canvas = document.getElementById("webglCanvas");
@@ -265,7 +277,7 @@ function setup(event, forceDisableWebGL) {
     let lerpFactor = 0.3;
     // Render loop
     function render() {
-		rightNow = beginTime + performance.now() // allow sync between devices
+        rightNow = beginTime + performance.now() // allow sync between devices
         mouseX = lerp(mouseX, wantMouseX, lerpFactor);
         mouseY = lerp(mouseY, wantMouseY, lerpFactor);
         excitement = lerp(excitement, wantExcetement, lerpFactor);
